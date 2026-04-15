@@ -1,0 +1,88 @@
+interface Service {
+    double calculateBill(int days, double rate);
+}
+
+class Room {
+    int roomNumber;
+    String roomType;
+    double pricePerDay;
+    boolean isAvailable;
+
+    Room(int roomNumber, String roomType, double pricePerDay) {
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.pricePerDay = pricePerDay;
+        this.isAvailable = true;
+    }
+}
+
+class Hotel implements Service {
+
+    Room[][] rooms;
+
+    Hotel() {
+        rooms = new Room[2][2];
+        rooms[0][0] = new Room(101, "Single", 1000);
+        rooms[0][1] = new Room(102, "Double", 1500);
+        rooms[1][0] = new Room(201, "Single", 1000);
+        rooms[1][1] = new Room(202, "Deluxe", 2500);
+    }
+
+    void bookRoom(int floor, int room) {
+        if (rooms[floor][room].isAvailable == true) {
+            rooms[floor][room].isAvailable = false;
+            System.out.println("Room Booked Successfully");
+        } else {
+            System.out.println("Room Already Occupied");
+        }
+    }
+
+    void cancelBooking(int floor, int room) {
+        rooms[floor][room].isAvailable = true;
+        System.out.println("Booking Cancelled");
+    }
+
+    public double calculateBill(int days, double rate) {
+        return days * rate;
+    }
+
+    void showRooms() {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (rooms[i][j].isAvailable == true) {
+                    System.out.println("Room " + rooms[i][j].roomNumber + " - Available");
+                } else {
+                    System.out.println("Room " + rooms[i][j].roomNumber + " - Occupied");
+                }
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Hotel h = new Hotel();
+
+        h.showRooms();
+
+        System.out.println("---");
+
+        h.bookRoom(0, 0);
+        h.bookRoom(0, 0);
+
+        System.out.println("---");
+
+        h.showRooms();
+
+        System.out.println("---");
+
+        double bill = h.calculateBill(3, 1500);
+        System.out.println("Total Bill for 3 days: " + bill);
+
+        System.out.println("---");
+
+        h.cancelBooking(0, 0);
+        h.showRooms();
+    }
+}
